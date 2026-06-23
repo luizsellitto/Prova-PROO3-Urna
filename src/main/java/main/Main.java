@@ -13,19 +13,20 @@ public class Main {
     public static void main(String[] args) {
         DatabaseBuilder.build();
 
-        CandidateRepository SQLiteCandidateRepository = new SQLiteCandidateRepository();
-        PrepareElectionService prepareElectionService = new PrepareElectionService(SQLiteCandidateRepository);
+        CandidateRepository candidateRepository = new SQLiteCandidateRepository();
+        PrepareElectionService prepareElectionService = new PrepareElectionService(candidateRepository);
         prepareElectionService.create();
-        VoteService voteService = new VoteService(SQLiteCandidateRepository);
-        TallyService tallyService = new TallyService(SQLiteCandidateRepository, 2, 70, 94);
+        VoteService voteService = new VoteService(candidateRepository);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10_000; i++) {
             voteService.vote(CsvUtils.randomCandidateNumber(Office.PRESIDENT.toString()), Office.PRESIDENT);
             voteService.vote(CsvUtils.randomCandidateNumber(Office.GOVERNOR.toString()), Office.GOVERNOR);
             voteService.vote(CsvUtils.randomCandidateNumber(Office.SENATOR.toString()), Office.SENATOR);
             voteService.vote(CsvUtils.randomCandidateNumber(Office.FEDERAL_REPRESENTATIVE.toString()), Office.FEDERAL_REPRESENTATIVE);
             voteService.vote(CsvUtils.randomCandidateNumber(Office.STATE_REPRESENTATIVE.toString()), Office.STATE_REPRESENTATIVE);
         }
+
+        TallyService tallyService = new TallyService(candidateRepository, 2, 70, 94);
 
         System.out.println("President:\n");
         tallyService.tally(Office.PRESIDENT).forEach(System.out::println);

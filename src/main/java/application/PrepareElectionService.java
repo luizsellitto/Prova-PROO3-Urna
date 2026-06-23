@@ -1,24 +1,22 @@
 package application;
 
-import java.util.List;
-
 import static utils.CsvUtils.readAllCandidates;
 
 public class PrepareElectionService {
-    CandidateRepository repo;
+    private final CandidateRepository repo;
 
     public PrepareElectionService(CandidateRepository repo) {
         this.repo = repo;
     }
 
     public void create() {
-        readAllCandidates().forEach(c -> repo.create(
-                        new CandidateDTO(
+        readAllCandidates().stream()
+                .map(c -> new CandidateDTO(
                         Integer.parseInt(c[0]),
                         c[1],
                         c[2],
                         c[3],
-                        0
-                )));
+                        0))
+                .forEach(repo::create);
     }
 }

@@ -3,13 +3,10 @@ package application;
 import domain.Candidate;
 import domain.Election;
 import domain.Office;
-import domain.PoliticalParty;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-
-import static utils.CsvUtils.readAllCandidates;
 
 public class TallyService {
     CandidateRepository repository;
